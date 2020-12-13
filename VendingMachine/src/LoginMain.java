@@ -14,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class LoginMain extends Application {
 
@@ -148,7 +149,7 @@ public static void checkUser() { //Check the user name and show different displa
 			// Check the Id and password
 			if (userIdText.getText().equals(user) && enterPassword.getText().equals(pin)) {			
 				 // Check if user id is a manager account  
-				if(user.equals("manager@gmail.com")) {
+				if(user.equals("manager")) {
 				System.out.println("\nYou logged in with Manager account");			
 				window.close();
 				Manager.display();
@@ -158,7 +159,7 @@ public static void checkUser() { //Check the user name and show different displa
 				System.out.println("\nYou logged in with User Name: " + user + "\n"); 																																	
 				// Move to drink order scene
 				Drinks.display(); 		
-				window.close();
+			//	window.close();
 				}
 			}
 	 	} // Loop end

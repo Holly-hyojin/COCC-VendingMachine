@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Scanner;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -28,12 +29,22 @@ public class Drinks {
 	public static CheckBox agreeCheck;
 	public static CheckBox reportCheck;
 	public static TextField report;
-	
 	public static ListView<String> listview;
 	
+	static int coke = 20;
+	static int dietCoke = 20;
+	static int fantaLemon = 20;
+	static int fantaOrange = 20;
 	
+	static boolean cokeOutOfStock = false;
+	static boolean dietCokeOutOfStock = false;
+	static boolean fantaLemonOutOfStock = false;
+	static boolean fantaOrangeOutOfStock  = false;
+	
+	static double moneyToManager= 0;
+  
 	public static void display() {
-		
+				
 		//First message
 		window = new Stage(); //Setting new Stage
 		window.setTitle("Drinks Menu");
@@ -67,12 +78,22 @@ public class Drinks {
 		agreeCheck.setAlignment(Pos.CENTER);
 		
 		
-		// payment button
+		// Cash payment button
 		Button cash = new Button(" Cash ");
-		cash.setOnAction( e -> show());
+		cash.setOnAction(e -> {
+			cash();			
+		});
 		
+		// Card payment button
 		Button card = new Button(" Card ");
-		card.setOnAction( e -> show());
+		card.setOnAction( e -> {
+			try {
+				show();
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+		});
 		
 		cash.setStyle("-fx-background-color: ghostwhite;");
 		card.setStyle("-fx-background-color: lavender; ");
@@ -105,7 +126,7 @@ public class Drinks {
 		reportPart.getChildren().addAll(reportCheck, report,reportBtn);
 		reportPart.setPadding(new Insets(5,5,5,5));
 		reportPart.setAlignment(Pos.BOTTOM_CENTER);
-		reportPart.setStyle("-fx-spacing: 12; -fx-background-color: mintcream;");
+		reportPart.setStyle("-fx-spacing: 12;");
 		
 		
 		
@@ -127,20 +148,169 @@ public class Drinks {
 	}
 	
 
-    public static void show(){ // Print customer's choice with price
+    public static void show() throws IOException{ // Print customer's choice with price
 
         ObservableList<String> list;
         list= listview.getSelectionModel().getSelectedItems();
         
         String numbers;
     	numbers = number.getSelectionModel().getSelectedItem();
-
+      	
     	float price = (float) (Integer.parseInt(numbers) * 1.2);  
     	
-        for( String ab : list ){
-            System.out.println("You select " + numbers + " of " + ab + "\nTotal Price is €" + price);
-        	}
-    	 }
+        for( String ab : list ){  // check which drink is it and there is enough stock        
+        	
+        	switch(ab) {
+         
+	         case "Coke": 
+	        	 if(coke >= (Integer.parseInt(numbers))) {
+		        	 coke -= (Integer.parseInt(numbers));
+		             System.out.println("You select " + numbers + " of " + ab + "\nTotal Price is €" + price);
+		        	 System.out.println("coke left: " + coke);
+	        	 } else {
+	         		 System.out.println("Sorry, Out of Stock!");
+	        	 	 cokeOutOfStock = true; 
+	        	 }
+	        	 break;
+	        	 
+	         case "Diet Coke":
+	        	 if(dietCoke >= (Integer.parseInt(numbers))) {
+	        	 dietCoke -= (Integer.parseInt(numbers));
+	        	 System.out.println("You select " + numbers + " of " + ab + "\nTotal Price is €" + price);
+	        	 System.out.println("Dite coke left: " + dietCoke);
+	        	 } else {
+	         		 System.out.println("Sorry, Out of Stock!");
+	        	 	 dietCokeOutOfStock = true; 
+	        	 }
+	        	 break;
+	        	 
+	         case "Fanta Lemon":
+	        	 if(fantaLemon >= (Integer.parseInt(numbers))) {
+	        	 fantaLemon -= (Integer.parseInt(numbers));
+	        	 System.out.println("You select " + numbers + " of " + ab + "\nTotal Price is €" + price);
+	        	 System.out.println("Fanta Lemon left: " + fantaLemon);
+	        	 } else {
+	         		 System.out.println("Sorry, Out of Stock!");
+	         		fantaLemonOutOfStock = true; 
+	        	 }
+	        	 break;
+	        	 
+	         case "Fanta Oragne":
+	        	 if(fantaOrange >= (Integer.parseInt(numbers))) {
+	        	 fantaOrange-= (Integer.parseInt(numbers));
+	        	 System.out.println("You select " + numbers + " of " + ab + "\nTotal Price is €" + price);
+	        	 System.out.println("Fanta Orange left: " + fantaOrange);
+	        	 } else {
+	         		 System.out.println("\n\nSorry, Out of Stock!");
+	         		fantaOrangeOutOfStock = true; 
+	        	 }
+	        	 break;
+	         }   // switch close           
+	        } //for loop end 
+        
+        reportOutOfStock(); // send a report to manager if drinks are out of stock
+    }
+
+    
+    // Method to write a report which drink is out of stock
+    @SuppressWarnings("resource")
+	public static void reportOutOfStock() throws IOException { 
+
+    	FileWriter file = new FileWriter ("Report.txt"); 
+    	
+    	if (cokeOutOfStock == true) {
+    		file.write("Coke is Out of Stock");
+    		file.close();
+    		System.out.println("Successfully Out of stock report wrote to the file.\n");
+    	}
+    	if (dietCokeOutOfStock == true) {
+    		file.write("Diet Cork is Out of Stock");
+    		file.close();
+    		System.out.println("Successfully Out of stock report wrote to the file.\n");
+    	}
+    	if (fantaLemonOutOfStock == true) {
+    		file.write("Fanta Lemon is Out of Stock");
+    		file.close();
+    		System.out.println("Successfully Out of stock report wrote to the file.\n");
+    	}
+    	if (fantaOrangeOutOfStock == true) {
+    		file.write("Fanta Orange is Out of Stock");  
+    		file.close();
+    		System.out.println("Successfully Out of stock report wrote to the file.\n");
+    	}
+    }
+    
+    public static void cash() {
+    	
+    	String numbers;
+    	numbers = number.getSelectionModel().getSelectedItem();
+    	boolean loopEnd = false;
+    	float price = (float) (Integer.parseInt(numbers) * 1.2); 
+    	
+    	// Ask to user to insert money using Scanner
+    	Scanner sc = new Scanner(System.in);
+    	System.out.println("\n\nYou select pay by Cash, Please insert €" + price + ": ");
+    	float userInput = sc.nextFloat();
+    	
+    	
+    	// if user put correct money, print 'Enjoy' message
+    	if(userInput == price) {
+    		System.out.println("Enjoy your drink!");
+    		moneyToManager += userInput;
+    	}
+    	
+    	
+    	// if user put extra money, give a warning and ask do they want to keep ordering
+    	if(userInput > price) { 
+    		
+    		float difference = userInput - price; 
+    		short userAgree = 9;
+    		while(!(userAgree == 0 || userAgree == 1)) {
+	    		System.out.printf("Your total price is €%.2f, We dont' give you back the chagne €%.2f%n", price, difference);
+	    		System.out.println("If it is ok, Please enter 1, if you want to cancle the order enter 0: ");
+	    		userAgree = sc.nextShort();
+    		}
+    		
+				switch (userAgree) {
+				case 1: 
+					System.out.println("Enjoy your drink!\n");
+					moneyToManager += userInput;
+					break;
+					
+				case 0:
+					System.out.println("Your order has been canceled\n");
+					break;
+					
+				default: // made a default just for in case while loop is not working
+					System.out.println("Please select between 0 and 1\n"); 
+					break;
+				}
+    		}
+
+    	
+    	// if user put lower money, ask to put the difference
+    	if (userInput < price) { 
+    		
+    		float diff = price - userInput;   		
+    		System.out.printf("Your total price is €%.2f, Please insert €%.2f more : ", price, diff);
+    		float rest = sc.nextFloat();
+    		userInput += rest;
+    		
+    		while(!(userInput == price)) {	
+    				diff = price - userInput; 
+	    			System.out.printf("Not correct money, Please insert €%.2f more : ", diff);
+	    			rest = sc.nextFloat();
+	        		userInput += rest;
+    			}
+	    		
+    		if(userInput == price) {
+		    	loopEnd = true;
+		        System.out.println("Enjoy your drink!\n");
+		    	moneyToManager += userInput;	    			
+		    	}    			  			    	
+    		}
+    	}
+    
     
     public static void reportToManager() throws IOException { 
     	
@@ -154,7 +324,8 @@ public class Drinks {
     		alert1.setHeaderText("Thank you for your report");
     		alert1.setContentText("Your report has been send to manager successfully");
     		alert1.showAndWait();
-            text.close();                                
+
+            text.close();  
         }
     	
 

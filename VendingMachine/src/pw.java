@@ -13,7 +13,7 @@ public class pw {
         System.out.println("File path is: " + new File("Registration.txt").getAbsolutePath());
 
             text.println("guest@gmail.com:1234"); //set the guest details
-            text.println("manager@gmail.com:1234"); //set the manager details
+            text.println("manager:1111"); //set the manager details
             text.println(CreateAccount.getEmail().getText() + ":" + CreateAccount.Pin().getText()); //set new user details            
 			text.close();                                
         }

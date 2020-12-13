@@ -1,5 +1,8 @@
 import java.io.IOException;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.Period;
+
 import com.sun.jdi.Field;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -91,19 +94,15 @@ public class CreateAccount {
 		lname.setStyle("-fx-spacing: 7;");
 		
 		
-		
 		//Date of Birth
 		Label DOB = new Label("Date of Birth:\t\t\t"); 
 		DOBText = new TextField(); 		
-		DOBText.setPromptText("dd/mm/yy");
+		DOBText.setPromptText("yyyy-mm-dd");
 		Button validateDOB = new Button(); 	
 		validateDOB.setText("Validate");		
-//		validateDOB.setOnAction(e -> {
-//			if(isAlphabetic(lastNameText)) { 
-//				getConfirmationBox();
-//			}else 
-//				getErrorMessage();
-//		}); 
+		validateDOB.setOnAction(e -> 
+			checkAge()
+		); 
 		validateDOB.setStyle("-fx-background-color: linen;");
 		
 		HBox birth = new HBox();
@@ -291,8 +290,7 @@ public class CreateAccount {
 		window2.show(); 
 	
 	}
-	
-	
+
 
 	//Method to setting width
 	public static void getWidth(TextField Text) { 
@@ -305,7 +303,7 @@ public class CreateAccount {
 		Text.setMaxWidth(200);
 	}
 	
-	//Method for validation, accepting only letter
+	// Method for validation, accepting only letter
 	public static boolean isAlphabetic(TextField lastNameText2) { 
 		String field = lastNameText2.getText();
 		
@@ -317,13 +315,24 @@ public class CreateAccount {
 			return true;
 	}
 
-	//Tried to get String to change and check if age (year) is bigger then 20.........
-//	public static boolean checkAge() {
-//		int age = Integer.parseInt(DOBText);
-//		if(age >= 2000) 
-//			return true;
-//		else return false;
-//	}
+	
+	// Method to check age is over 18 
+	public static void checkAge() {
+	
+		LocalDate currentDate = LocalDate.now();
+		LocalDate birthDate = LocalDate.parse(DOBText.getText());
+		
+		Period period = Period.between(birthDate, currentDate);
+		if (period.getYears() >= 18) {
+			System.out.println("18 or over. You can sign up!");
+			getConfirmationBox();
+		} else {
+			System.out.println("To sign up, You need to be more then 18 years.");
+			getErrorMessage();
+		}
+		
+	}
+	
 	
 	//Checking PIN number, only number and 4 digits
 	public static boolean isNumber(TextField pinNumber) {
