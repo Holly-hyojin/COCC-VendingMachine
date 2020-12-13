@@ -67,7 +67,7 @@ public class Drinks {
 		//Number part
 		Label numbers = new Label("Numbers: ");
 		number = new ComboBox<>();
-		number.getItems().addAll("1", "2", "3", "4", "5");
+		number.getItems().addAll("1", "2", "3", "4", "5", "10");
 		HBox drinksNumber = new HBox();
 		drinksNumber.getChildren().addAll(numbers, number);
 		drinksNumber.setAlignment(Pos.CENTER);
@@ -81,7 +81,12 @@ public class Drinks {
 		// Cash payment button
 		Button cash = new Button(" Cash ");
 		cash.setOnAction(e -> {
-			cash();			
+			try {
+				show();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}			
 		});
 		
 		// Card payment button
@@ -165,7 +170,8 @@ public class Drinks {
 	         case "Coke": 
 	        	 if(coke >= (Integer.parseInt(numbers))) {
 		        	 coke -= (Integer.parseInt(numbers));
-		             System.out.println("You select " + numbers + " of " + ab + "\nTotal Price is €" + price);
+		             System.out.println("\nYou select " + numbers + " of " + ab + "\nTotal Price is €" + price);
+		             cash();
 		        	 System.out.println("coke left: " + coke);
 	        	 } else {
 	         		 System.out.println("Sorry, Out of Stock!");
@@ -176,7 +182,8 @@ public class Drinks {
 	         case "Diet Coke":
 	        	 if(dietCoke >= (Integer.parseInt(numbers))) {
 	        	 dietCoke -= (Integer.parseInt(numbers));
-	        	 System.out.println("You select " + numbers + " of " + ab + "\nTotal Price is €" + price);
+	        	 System.out.println("\nYou select " + numbers + " of " + ab + "\nTotal Price is €" + price);
+	        	 cash();
 	        	 System.out.println("Dite coke left: " + dietCoke);
 	        	 } else {
 	         		 System.out.println("Sorry, Out of Stock!");
@@ -187,7 +194,8 @@ public class Drinks {
 	         case "Fanta Lemon":
 	        	 if(fantaLemon >= (Integer.parseInt(numbers))) {
 	        	 fantaLemon -= (Integer.parseInt(numbers));
-	        	 System.out.println("You select " + numbers + " of " + ab + "\nTotal Price is €" + price);
+	        	 System.out.println("\nYou select " + numbers + " of " + ab + "\nTotal Price is €" + price);
+	        	 cash();
 	        	 System.out.println("Fanta Lemon left: " + fantaLemon);
 	        	 } else {
 	         		 System.out.println("Sorry, Out of Stock!");
@@ -198,7 +206,8 @@ public class Drinks {
 	         case "Fanta Oragne":
 	        	 if(fantaOrange >= (Integer.parseInt(numbers))) {
 	        	 fantaOrange-= (Integer.parseInt(numbers));
-	        	 System.out.println("You select " + numbers + " of " + ab + "\nTotal Price is €" + price);
+	        	 System.out.println("\nYou select " + numbers + " of " + ab + "\nTotal Price is €" + price);
+	        	 cash();
 	        	 System.out.println("Fanta Orange left: " + fantaOrange);
 	        	 } else {
 	         		 System.out.println("\n\nSorry, Out of Stock!");
@@ -249,7 +258,7 @@ public class Drinks {
     	
     	// Ask to user to insert money using Scanner
     	Scanner sc = new Scanner(System.in);
-    	System.out.println("\n\nYou select pay by Cash, Please insert €" + price + ": ");
+    	System.out.println("\nYou select pay by Cash, Please insert €" + price + ": ");
     	float userInput = sc.nextFloat();
     	
     	
@@ -265,9 +274,9 @@ public class Drinks {
     		
     		float difference = userInput - price; 
     		short userAgree = 9;
-    		while(!(userAgree == 0 || userAgree == 1)) {
+    		while(!(userAgree == 0 || userAgree == 1)) { // ask to user agreement that there's no change back 
 	    		System.out.printf("Your total price is €%.2f, We dont' give you back the chagne €%.2f%n", price, difference);
-	    		System.out.println("If it is ok, Please enter 1, if you want to cancle the order enter 0: ");
+	    		System.out.println("If it is ok, Please enter 1, if you want to cancle the order enter 0: "); // get input between 1 or 0
 	    		userAgree = sc.nextShort();
     		}
     		
